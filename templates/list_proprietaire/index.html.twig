@@ -1,0 +1,162 @@
+
+
+            
+{% extends "base_admin.html.twig" %}
+{% block content %}
+    
+           
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Proprietaires d'animaux</h4>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    
+                                    <div class="card-body">
+        
+                                        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                            <tr>
+                                                <th>nom</th>
+                                                <th>prenom</th>
+                                                <th>adresse-email</th>
+                                                
+                                                <th>pays</th>
+                                                <th>gouvernorat</th>
+                                                <th>ville</th>
+                                                <th>rue</th>
+                                                <th>action</th>
+
+                                            </tr>
+                                            </thead>
+        
+        
+                                            <tbody>
+                                            {% for p in propritaires %}
+                                            <tr>
+                                                <td>{{p.nom}}</td>
+                                                <td>{{p.prenom}}</td>
+                                                <td>{{p.email}}</td>
+                                                <td>{{p.pays}}</td>
+                                                <td>{{p.gouvernorat}}</td>
+                                                <td>{{p.ville}}</td>
+                                                <td>{{p.rue}}</td>
+                                                {% if p.bloque==0 %}
+                                                 <td><button class="btn btn-outline-warning waves-effect waves-light bloque" id="{{p.id}}">bloquer</button>
+                                                 {% else %}
+                                                 <td><button class="btn btn-outline-success waves-effect waves-light debloque" id="{{p.id}}">débloquer</button>
+
+                                                {% endif %}
+                                                
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+        
+                                    </div>
+                                </div>
+                            </div> 
+                        </div> 
+        
+                    </div> 
+                </div>
+                
+              
+                
+            </div>
+
+
+             <div class="modal" tabindex="-1" role="dialog" id="bloquemodal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Bloque</h5>
+        
+      </div>
+      <div class="modal-body">
+        <p>êtes vous sur de bloquer le propriétaire d'animal ?</p>
+      </div>
+      <form method="POST" action="{{path('bloquer_proprietaire')}}" name="form" id="form" class="form">
+      <input type="hidden" name="bloque_id" id="pro_id"/>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Oui</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="debloquemodal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Débloque</h5>
+        
+      </div>
+      <div class="modal-body">
+        <p>êtes vous sur de débloquer le propriétaire d'animal ?</p>
+      </div>
+      <form method="POST" action="{{path('debloquer_proprietaire')}}" name="form" id="form" class="form">
+      <input type="hidden" name="debloque_id" id="proid"/>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Oui</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+            
+{% endblock %}         
+       
+
+{% block javascript %}
+    <!-- Required datatable js -->
+        <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+        <!-- Buttons examples -->
+        <script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+        <script src="{{asset('assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js')}}"></script>
+        <script src="{{asset('assets/libs/jszip/jszip.min.js')}}"></script>
+        <script src="{{asset('assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
+        <script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script>
+        <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+        <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+        <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}">
+        <!-- Responsive examples -->
+        <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+        <script src="{{asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
+        <!-- Datatable init js -->
+        <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script> 
+
+                <script>
+        $(document).ready(function(){  
+      $('.bloque').on('click' ,function(e){ 
+        var blq_id = $(this).attr("id");
+        document.getElementById("pro_id").value = blq_id;
+        $('#bloquemodal').modal("show");
+    })
+});
+
+      $(document).ready(function(){  
+      $('.debloque').on('click' ,function(e){ 
+        var dblq_id = $(this).attr("id");
+        document.getElementById("proid").value = dblq_id;
+        $('#debloquemodal').modal("show");
+    })
+});
+        </script>
+{% endblock %}
